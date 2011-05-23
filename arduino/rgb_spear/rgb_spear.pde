@@ -8,10 +8,13 @@
 byte currR, currG, currB;
 byte newR, newG, newB;
 
-
 void testLEDs(void);
 byte char2dec(byte ch);
 void transitionLED(int pin, byte *currV, byte newV);
+
+#define PIN_BUZZ 2
+void __buzz(int targetPin, long frequency, long length);
+#define buzz(__freq__, __len__) __buzz(PIN_BUZZ, __freq__, __len__)
 
 void setup(void)
 {
@@ -24,6 +27,9 @@ void setup(void)
   newR = 0; newG = 0; newB = 0;
 
   Serial.begin(9600);
+
+  // buzz at 1500Hz for 500 milliseconds
+  buzz(1500, 100);
 
   testLEDs();
 }
@@ -95,4 +101,15 @@ void transitionLED(int pin, byte *currV, byte newV)
   analogWrite(pin, *currV);
 }
 
+void __buzz(int buzzPin, long frequency, long length) {
+  pinMode(buzzPin, OUTPUT);
+  long delayValue = 1000000/frequency/2;
+  long numCycles = frequency * length/ 1000;
+  for (long i=0; i < numCycles; i++) {
+    digitalWrite(buzzPin,HIGH);
+    delayMicroseconds(delayValue);
+    digitalWrite(buzzPin,LOW);
+    delayMicroseconds(delayValue);
+  }
+}
 /* vim: set sw=2 et: */
