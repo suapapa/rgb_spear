@@ -14,8 +14,15 @@ import serial
 import socket
 import os
 import sys
+import time
 
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+try:
+    serialPort = sys.argv[1]
+except:
+    serialPort = '/dev/ttyUSB2'
+    print "will open default serial port, %s"%serialPort
+
+ser = serial.Serial(serialPort, 9600)
 sock = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
 
 UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
@@ -30,10 +37,11 @@ while(1):
         # print packet
         if packet == "quit":
             break;
-        elif packet.startswith("#"):
+        else: #elif packet.startswith("#"):
             ser.write(packet)
             # print ".",
             # sys.stdout.flush()
+        time.sleep(0.5)
     except:
         break
 

@@ -23,7 +23,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("usage: %s <colorcode>"%sys.argv[0])
         exit(1)
-    packet = "#"+sys.argv[1]
+    packet = "$"+sys.argv[1]
     n = sock.sendto(packet, UDSPath)
     if (n != len(packet)):
        print("somthing wrong!")
