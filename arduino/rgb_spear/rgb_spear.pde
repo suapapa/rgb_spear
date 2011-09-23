@@ -16,12 +16,18 @@ void transitionLED(int pin, byte *currV, byte newV);
 void __buzz(int targetPin, long frequency, long length);
 #define buzz(__freq__, __len__) __buzz(PIN_BUZZ, __freq__, __len__)
 
+#define MODE_TRANSITION 0
+#define MODE_ON 1
+byte onMode;
+
 void setup(void)
 {
   pinMode(PIN_L, OUTPUT);
   pinMode(PIN_R, OUTPUT);
   pinMode(PIN_G, OUTPUT);
   pinMode(PIN_B, OUTPUT);
+
+  onMode = MODE_TRANSITION;
 
   currR = 0; currG = 0; currB = 0;
   newR = 0; newG = 0; newB = 0;
@@ -42,8 +48,20 @@ byte high, low;
 
 void loop(void)
 {
-  if (Serial.available() > 0 && '#' == Serial.read()) {
+  byte cmd;
+  if (Serial.available() > 0) {
     digitalWrite(PIN_L, HIGH);
+
+    cmd = Serial.read();
+    if ('$' == cmd)
+      onMode = MODE_TRANSITION;
+    else if ('#' == cmd)
+      onMode = MODE_ON;
+    else {
+      buzz(1500, 100);
+      goto exit_loop;
+    }
+
     // Wait for 6 chars
     for(int i = 0; i < 3; i++) {
       if (Serial.available() >= 6)
@@ -59,10 +77,20 @@ void loop(void)
     digitalWrite(PIN_L, LOW);
   }
 
-  transitionLED(PIN_R, &currR, newR);
-  transitionLED(PIN_G, &currG, newG);
-  transitionLED(PIN_B, &currB, newB);
+  switch(onMode) {
+    case MODE_TRANSITION:
+      transitionLED(PIN_R, &currR, newR);
+      transitionLED(PIN_G, &currG, newG);
+      transitionLED(PIN_B, &currB, newB);
+      break;
+    case MODE_ON:
+      analogWrite(PIN_R, newR); currR = newR;
+      analogWrite(PIN_G, newG); currG = newG;
+      analogWrite(PIN_B, newB); currB = newB;
+      break;
+  }
 
+exit_loop:
   delay(10);
 }
 
