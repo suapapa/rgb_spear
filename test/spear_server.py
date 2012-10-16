@@ -25,7 +25,8 @@ except:
 ser = serial.Serial(serialPort, 9600)
 sock = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
 
-UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+#UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+UDSPath = "/tmp/rgb_spear"
 if os.path.exists(UDSPath):
     os.remove(UDSPath)
 sock.bind(UDSPath)

@@ -16,7 +16,8 @@ import time
 import os
 
 sock = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
-UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+#UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+UDSPath = "/tmp/rgb_spear"
 
 if __name__ == "__main__":
     import sys

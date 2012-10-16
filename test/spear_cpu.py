@@ -16,7 +16,8 @@ import time
 import os
 
 sock = socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
-UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+#UDSPath = os.path.join(os.environ["HOME"], ".rgb_spear")
+UDSPath = r'/tmp/rgb_spear'
 
 def scale(v, o_min = 0, o_max = 100, t_min = 0, t_max = 255):
     if v < o_min: v = o_min
