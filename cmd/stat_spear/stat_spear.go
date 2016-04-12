@@ -60,10 +60,10 @@ func main() {
 
 	// RED for cpu
 	if flagCPU {
-		fmt.Println("enable CPU")
+		fmt.Println("Enable CPU")
 		go func() {
 			for {
-				c, err := cpu.CPUPercent(100*time.Millisecond, false)
+				c, err := cpu.Percent(100*time.Millisecond, false)
 				if err != nil {
 					panic(err)
 				}
@@ -104,7 +104,7 @@ func main() {
 			lastSent, lastRecv := uint64(0), uint64(0)
 
 			for {
-				c, err := net.NetIOCounters(false)
+				c, err := net.IOCounters(false)
 				if err != nil {
 					panic(err)
 				}
